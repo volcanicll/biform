@@ -124,8 +124,8 @@ src/
 ├── components/{input,select,switch,checkbox,form}/
 ├── core/
 │   ├── platform/            # PlatformProvider, usePlatform, useMediaQuery
-│   └── portal/              # Portal, Overlay（焦点陷阱/滚动锁/Esc/点外，双端复用）
-├── hooks/                   # useControlled, useId, useForkRef, useClickOutside, useFocusTrap, ...
+│   └── portal/              # Portal, PortalContext, Overlay（焦点陷阱/滚动锁/Esc/点外，双端复用）
+├── hooks/                   # useControlled, useId, useForkRef, useLatest, useEventListener, useClickOutside, useFocusTrap, ...
 ├── theme/                   # variables.less, runtime.css, mixins.less
 ├── utils/                   # cx, omit, ssr, types
 └── test/                    # setup (matchMedia/scrollIntoView polyfill), renderWithPlatform
@@ -135,6 +135,7 @@ src/
 
 - **headless 钩子单元测试**：平台无关，快速验证逻辑（开关、键盘导航、受控/非受控、校验）。
 - **组件测试**：`renderWithPlatform` 强制平台，断言 PC/移动两端渲染与交互。
+- **Storybook 双视口**：`preview.tsx` 用真实 `<iframe>` 设备框（`MobileFrame`）渲染移动端 story——底部弹层 / 焦点陷阱 / 滚动锁通过 `PortalContext` 作用域到「设备」内，不再逃逸到画布；PC 端并排渲染。样式表从画布增量镜像，HMR 无闪烁。
 - a11y 由 Storybook `addon-a11y`（axe）在每个 story 上校验。
 
 ## 路线图
