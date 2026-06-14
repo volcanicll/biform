@@ -1,33 +1,14 @@
 import type { Preview } from '@storybook/react';
 import React, { ReactNode } from 'react';
 import { PlatformProvider } from '../src/core/platform';
+import { MobileFrame } from './MobileFrame';
 import '../src/theme/runtime.css';
 
-/**
- * DualViewport decorator.
- *
- * Renders every story twice, side by side: a mobile frame (forced `mobile`)
- * and a PC frame (forced `pc`). This is the primary visual verification surface
- * for the "one API, two UIs" architecture — the same story props produce two
- * structurally different UIs.
- */
-function MobileFrame({ children }: { children: ReactNode }) {
+function Caption({ label, meta }: { label: string; meta: string }) {
   return (
-    <div
-      style={{
-        width: 390,
-        height: 720,
-        border: '8px solid #111827',
-        borderRadius: 32,
-        overflow: 'hidden',
-        display: 'inline-block',
-        verticalAlign: 'top',
-        background: '#f5f5f5',
-      }}
-    >
-      <PlatformProvider platform="mobile">
-        <div style={{ padding: 12, height: '100%', overflow: 'auto' }}>{children}</div>
-      </PlatformProvider>
+    <div style={{ marginBottom: 12, display: 'flex', alignItems: 'baseline', gap: 8 }}>
+      <span style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>{label}</span>
+      <span style={{ fontSize: 11, color: '#6b7280' }}>{meta}</span>
     </div>
   );
 }
@@ -36,12 +17,15 @@ function PcFrame({ children }: { children: ReactNode }) {
   return (
     <div
       style={{
-        width: 800,
-        minHeight: 600,
-        display: 'inline-block',
-        verticalAlign: 'top',
-        padding: 16,
+        flex: '1 1 520px',
+        minWidth: 0,
         background: '#ffffff',
+        border: '1px solid #e5e7eb',
+        borderRadius: 12,
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.06)',
+        padding: 24,
+        minHeight: 560,
+        overflow: 'auto',
       }}
     >
       <PlatformProvider platform="pc">{children}</PlatformProvider>
@@ -52,19 +36,42 @@ function PcFrame({ children }: { children: ReactNode }) {
 const preview: Preview = {
   decorators: [
     (Story) => (
-      <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start', flexWrap: 'wrap' }}>
-        <MobileFrame>
-          <Story />
-        </MobileFrame>
-        <PcFrame>
-          <Story />
-        </PcFrame>
+      <div
+        style={{
+          padding: 32,
+          background: '#f3f4f6',
+          minHeight: '100vh',
+          boxSizing: 'border-box',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            gap: 40,
+            alignItems: 'flex-start',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div style={{ flex: '0 0 auto' }}>
+            <Caption label="Mobile" meta="390 × 780 · iframe 模拟真机" />
+            <MobileFrame>
+              <Story />
+            </MobileFrame>
+          </div>
+          <div style={{ flex: '1 1 520px', minWidth: 320 }}>
+            <Caption label="PC" meta="桌面端 · auto" />
+            <PcFrame>
+              <Story />
+            </PcFrame>
+          </div>
+        </div>
       </div>
     ),
   ],
   parameters: {
     layout: 'fullscreen',
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
+    backgrounds: { default: 'canvas', values: [{ name: 'canvas', value: '#f3f4f6' }] },
   },
 };
 

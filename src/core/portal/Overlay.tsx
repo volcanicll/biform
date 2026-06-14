@@ -1,5 +1,6 @@
-import { useRef, type ReactNode, type RefObject } from 'react';
+import { useContext, useRef, type ReactNode, type RefObject } from 'react';
 import { Portal } from './Portal';
+import { PortalContext } from './PortalContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useEscapeKey } from '@/hooks/useEscapeKey';
 import { useScrollLock } from '@/hooks/useScrollLock';
@@ -57,11 +58,13 @@ export function Overlay({
   children,
 }: OverlayProps) {
   const contentRef = useRef<HTMLDivElement>(null);
+  const ctx = useContext(PortalContext);
+  const doc = ctx?.doc ?? document;
 
-  useScrollLock(open && lockScroll);
-  useEscapeKey(() => onClose('escape'), open && closeOnEscape);
-  useClickOutside([...outsideRefs, contentRef], () => onClose('outside'), open && closeOnOutside);
-  useFocusTrap(contentRef, open && trapFocus, returnFocus);
+  useScrollLock(open && lockScroll, doc);
+  useEscapeKey(() => onClose('escape'), open && closeOnEscape, doc);
+  useClickOutside([...outsideRefs, contentRef], () => onClose('outside'), open && closeOnOutside, doc);
+  useFocusTrap(contentRef, open && trapFocus, returnFocus, doc);
 
   if (!open) return null;
 
