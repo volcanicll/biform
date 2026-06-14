@@ -37,11 +37,14 @@ export function FormItem(props: FormItemProps): ReactElement | null {
   const { platform, unstable } = usePlatform(override);
   const effective = unstable ? 'pc' : platform;
 
-  // Register/unregister the field with its rules.
+  // Register/unregister the field with its rules. Depend on the stable setter
+  // identities rather than the whole context object, so this only re-runs on
+  // mount/unmount or when `name`/`rules` change — not on every keystroke.
+  const { registerField, unregisterField } = ctx;
   useEffect(() => {
-    ctx.registerField(name, rules);
-    return () => ctx.unregisterField(name);
-  }, [ctx, name, rules]);
+    registerField(name, rules);
+    return () => unregisterField(name);
+  }, [registerField, unregisterField, name, rules]);
 
   const value = ctx.values[name];
   const error = ctx.errors[name];

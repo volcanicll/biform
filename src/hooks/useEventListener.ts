@@ -1,4 +1,5 @@
-import { useEffect, useRef, type RefObject } from 'react';
+import { useEffect, type RefObject } from 'react';
+import { useLatest } from './useLatest';
 
 type EventTarget = Window | Document | HTMLElement | RefObject<HTMLElement | null>;
 
@@ -14,11 +15,7 @@ export function useEventListener(
   element: EventTarget = window,
   options?: AddEventListenerOptions,
 ): void {
-  const savedHandler = useRef(handler);
-
-  useEffect(() => {
-    savedHandler.current = handler;
-  }, [handler]);
+  const savedHandler = useLatest(handler);
 
   useEffect(() => {
     const target =
@@ -28,5 +25,6 @@ export function useEventListener(
     const listener = (event: Event) => savedHandler.current(event);
     target.addEventListener(eventName, listener, options);
     return () => target.removeEventListener(eventName, listener, options);
-  }, [eventName, element, options]);
+    // savedHandler holds a stable identity; listing it satisfies exhaustive-deps.
+  }, [eventName, element, options, savedHandler]);
 }

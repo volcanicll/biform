@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type MouseEvent, type RefObject } from 'react';
+import { useMemo, useRef, useState, type KeyboardEvent, type MouseEvent, type RefObject } from 'react';
 import { useControlled } from '@/hooks/useControlled';
 import { useId } from '@/hooks/useId';
+import { useLatest } from '@/hooks/useLatest';
 import type { SelectOption, UseSelectProps } from './types';
 
 export interface UseSelectReturn {
@@ -82,15 +83,13 @@ export function useSelect(props: UseSelectProps): UseSelectReturn {
   const listboxRef = useRef<HTMLUListElement>(null);
   const idBase = useId('select');
 
-  // Keep latest callbacks/options in refs so keyboard handlers read fresh values.
-  const onChangeRef = useRef(onChange);
-  const onOpenChangeRef = useRef(onOpenChange);
-  const optionsRef = useRef(options);
-  useEffect(() => {
-    onChangeRef.current = onChange;
-    onOpenChangeRef.current = onOpenChange;
-    optionsRef.current = options;
-  });
+  // Stable bundle of the two refs so consumers (e.g. PcSelect's positioning
+  // effect) can depend on `refs` without re-running every render.
+  const refs = useMemo(() => ({ trigger: triggerRef, listbox: listboxRef }), []);
+
+  // Keep latest callbacks in refs so keyboard handlers read fresh values.
+  const onChangeRef = useLatest(onChange);
+  const onOpenChangeRef = useLatest(onOpenChange);
 
   const filteredOptions = useMemo(() => {
     if (!enableSearch || searchValue.trim() === '') return options;
@@ -282,7 +281,7 @@ export function useSelect(props: UseSelectProps): UseSelectReturn {
     triggerProps,
     listboxProps,
     getOptionProps,
-    refs: { trigger: triggerRef, listbox: listboxRef },
+    refs,
     idBase,
   };
 }

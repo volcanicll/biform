@@ -9,21 +9,25 @@ const FOCUSABLE_SELECTOR =
  *  - cycles Tab / Shift+Tab within the container,
  *  - restores focus to the previously-focused element on deactivation (unless
  *    `restoreFocus` is false).
+ *
+ * @param doc which document to read `activeElement` from (defaults to the main
+ *            document; overridden with the iframe document inside the device frame).
  */
 export function useFocusTrap(
   containerRef: RefObject<HTMLElement>,
   active = true,
   restoreFocus = true,
+  doc: Document = document,
 ): void {
   useEffect(() => {
     if (!active) return;
     const container = containerRef.current;
     if (!container) return;
 
-    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const previouslyFocused = doc.activeElement as HTMLElement | null;
     const getFocusables = () =>
       Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
-        (el) => el.offsetParent !== null || el === document.activeElement,
+        (el) => el.offsetParent !== null || el === doc.activeElement,
       );
 
     // Defer initial focus a tick so children mount (e.g. overlay content).
@@ -38,11 +42,11 @@ export function useFocusTrap(
       const first = items[0];
       const last = items[items.length - 1];
       if (event.shiftKey) {
-        if (first && document.activeElement === first) {
+        if (first && doc.activeElement === first) {
           event.preventDefault();
           last?.focus();
         }
-      } else if (last && document.activeElement === last) {
+      } else if (last && doc.activeElement === last) {
         event.preventDefault();
         first?.focus();
       }
@@ -54,5 +58,5 @@ export function useFocusTrap(
       container.removeEventListener('keydown', onKeyDown);
       if (restoreFocus) previouslyFocused?.focus?.();
     };
-  }, [active, containerRef, restoreFocus]);
+  }, [active, containerRef, restoreFocus, doc]);
 }

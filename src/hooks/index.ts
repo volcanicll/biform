@@ -1,5 +1,6 @@
 export { useControlled } from './useControlled';
 export type { UseControlledParams } from './useControlled';
+export { useLatest } from './useLatest';
 export { useId } from './useId';
 export { useForkRef } from './useForkRef';
 export { useEventListener } from './useEventListener';

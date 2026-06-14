@@ -43,7 +43,21 @@ function FormImpl(props: FormProps) {
       registerField: formState.registerField,
       unregisterField: formState.unregisterField,
     }),
-    [formState, layout],
+    // Depend on the individual members: the setters are stable useCallbacks, so
+    // the context only gets a new identity when values/errors/disabled/validateOn
+    // or layout genuinely change — not on every Form render. This keeps FormItem's
+    // registration effect from churning on each keystroke.
+    [
+      formState.values,
+      formState.errors,
+      formState.disabled,
+      formState.validateOn,
+      layout,
+      formState.setFieldValue,
+      formState.setFieldError,
+      formState.registerField,
+      formState.unregisterField,
+    ],
   );
 
   const shell =

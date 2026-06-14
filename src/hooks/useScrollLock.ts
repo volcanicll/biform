@@ -2,20 +2,22 @@ import { useEffect } from 'react';
 
 /**
  * Lock body scroll while `active`, compensating for scrollbar width to avoid
- * layout shift. Restores prior styles on cleanup.
+ * layout shift. Restores prior styles on cleanup. Operates on `doc` (default
+ * the main document; the iframe document inside the Storybook device frame).
  */
-export function useScrollLock(active = true): void {
+export function useScrollLock(active = true, doc: Document = document): void {
   useEffect(() => {
     if (!active) return;
-    const { overflow, paddingRight } = document.body.style;
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const { overflow, paddingRight } = doc.body.style;
+    const scrollbarWidth =
+      (doc.defaultView?.innerWidth ?? 0) - doc.documentElement.clientWidth;
     if (scrollbarWidth > 0) {
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
+      doc.body.style.paddingRight = `${scrollbarWidth}px`;
     }
-    document.body.style.overflow = 'hidden';
+    doc.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = overflow;
-      document.body.style.paddingRight = paddingRight;
+      doc.body.style.overflow = overflow;
+      doc.body.style.paddingRight = paddingRight;
     };
-  }, [active]);
+  }, [active, doc]);
 }
