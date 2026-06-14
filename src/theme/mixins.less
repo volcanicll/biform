@@ -1,0 +1,26 @@
+// ============================================================================
+// Shared Less mixins. Consumed by .module.less files via `composes` or `.mixin();`.
+// ============================================================================
+
+// Visible focus ring for keyboard users. Never `outline: none` without this.
+.lib-focus-ring() {
+  outline: 2px solid var(--lib-color-focus-ring);
+  outline-offset: 2px;
+}
+
+.lib-focus-visible() {
+  &:focus-visible {
+    .lib-focus-ring();
+  }
+}
+
+// Guarantee a minimum tappable area on touch.
+.lib-hit-area(@min: @lib-hit-area-min) {
+  min-width: @min;
+  min-height: @min;
+}
+
+// 1px border that respects the design token and stays crisp.
+.lib-bordered(@color: var(--lib-color-border)) {
+  border: 1px solid @color;
+}

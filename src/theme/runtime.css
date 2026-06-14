@@ -1,0 +1,70 @@
+/* ============================================================================
+ * Runtime theme variables (CSS custom properties).
+ *
+ * Imported once by `src/index.ts`. Consumers can override any of these at
+ * `:root` (or a scoped ancestor) to re-theme instantly with no rebuild.
+ * These mirror the build-time Less tokens in `variables.less`; CSS Modules
+ * reference the CSS vars so they respond to runtime overrides.
+ * ============================================================================ */
+
+:root {
+  /* colors */
+  --lib-color-primary: #2563eb;
+  --lib-color-primary-hover: #1d4ed8;
+  --lib-color-primary-active: #1e40af;
+  --lib-color-success: #16a34a;
+  --lib-color-warning: #d97706;
+  --lib-color-danger: #dc2626;
+
+  --lib-color-text: #1f2937;
+  --lib-color-text-secondary: #6b7280;
+  --lib-color-text-disabled: #d1d5db;
+
+  --lib-color-border: #d1d5db;
+  --lib-color-border-hover: #9ca3af;
+  --lib-color-bg: #ffffff;
+  --lib-color-bg-elevated: #ffffff;
+  --lib-color-bg-subtle: #f9fafb;
+  --lib-color-bg-mask: rgba(0, 0, 0, 0.45);
+
+  --lib-color-focus-ring: rgba(37, 99, 235, 0.35);
+
+  /* spacing */
+  --lib-space-1: 4px;
+  --lib-space-2: 8px;
+  --lib-space-3: 12px;
+  --lib-space-4: 16px;
+  --lib-space-5: 24px;
+  --lib-space-6: 32px;
+
+  /* radius */
+  --lib-radius-sm: 4px;
+  --lib-radius-md: 6px;
+  --lib-radius-lg: 8px;
+  --lib-radius-full: 9999px;
+
+  /* sizing */
+  --lib-pc-control-height-sm: 24px;
+  --lib-pc-control-height-md: 32px;
+  --lib-pc-control-height-lg: 40px;
+  --lib-mobile-control-height-sm: 36px;
+  --lib-mobile-control-height-md: 44px;
+  --lib-mobile-control-height-lg: 52px;
+  --lib-hit-area-min: 44px;
+
+  /* typography */
+  --lib-font-size-sm: 12px;
+  --lib-font-size-md: 14px;
+  --lib-font-size-lg: 16px;
+  --lib-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+
+  /* z-index */
+  --lib-z-overlay: 1000;
+  --lib-z-modal: 1100;
+
+  /* motion */
+  --lib-duration-fast: 120ms;
+  --lib-duration-base: 200ms;
+  --lib-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+}

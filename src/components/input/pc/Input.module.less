@@ -1,0 +1,106 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lib-space-2);
+  width: 100%;
+  height: var(--lib-pc-control-height-md);
+  padding: 0 var(--lib-space-3);
+  border: 1px solid var(--lib-color-border);
+  border-radius: var(--lib-radius-md);
+  background: var(--lib-color-bg);
+  color: var(--lib-color-text);
+  font-size: var(--lib-font-size-md);
+  font-family: var(--lib-font-family);
+  box-sizing: border-box;
+  transition:
+    border-color var(--lib-duration-fast) var(--lib-easing-standard),
+    box-shadow var(--lib-duration-fast) var(--lib-easing-standard);
+
+  &:hover {
+    border-color: var(--lib-color-border-hover);
+  }
+
+  &.focused {
+    border-color: var(--lib-color-primary);
+    box-shadow: 0 0 0 2px var(--lib-color-focus-ring);
+  }
+
+  &.disabled {
+    background: var(--lib-color-bg-subtle);
+    color: var(--lib-color-text-disabled);
+    cursor: not-allowed;
+  }
+
+  &.statusError {
+    border-color: var(--lib-color-danger);
+    &.focused {
+      box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.25);
+    }
+  }
+
+  &.statusWarning {
+    border-color: var(--lib-color-warning);
+  }
+}
+
+.sizeSm {
+  height: var(--lib-pc-control-height-sm);
+  font-size: var(--lib-font-size-sm);
+}
+.sizeMd {
+  height: var(--lib-pc-control-height-md);
+}
+.sizeLg {
+  height: var(--lib-pc-control-height-lg);
+  font-size: var(--lib-font-size-lg);
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+
+  &::placeholder {
+    color: var(--lib-color-text-secondary);
+  }
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.prefix,
+.suffix {
+  display: inline-flex;
+  align-items: center;
+  color: var(--lib-color-text-secondary);
+  flex: 0 0 auto;
+}
+
+.count {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--lib-font-size-sm);
+  color: var(--lib-color-text-secondary);
+  flex: 0 0 auto;
+}
+
+.clear {
+  appearance: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--lib-color-text-secondary);
+  padding: 2px 4px;
+  line-height: 1;
+  border-radius: var(--lib-radius-sm);
+  flex: 0 0 auto;
+
+  &:hover {
+    color: var(--lib-color-text);
+  }
+}
