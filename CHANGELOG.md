@@ -23,6 +23,7 @@
 ### 文档
 
 - 新增 `CHANGELOG.md`；`README.md` 补充 `useLatest` / `PortalContext` 与 Storybook iframe 设备框说明。
+- 开源化：新增 `LICENSE`（MIT）、`CONTRIBUTING.md`、GitHub Actions CI（lint / test / build）；`README.md` 增加英文简介、徽章与 License 段；`package.json` 补全 `license` / `author` / `repository` / `keywords` / `engines` 等元信息。
 
 ## [0.1.0] - 2026-06-14
 

@@ -2,6 +2,34 @@
   "name": "common-component",
   "version": "0.1.0",
   "description": "One-API-Two-UIs React form components (PC + Mobile)",
+  "license": "MIT",
+  "author": "volcanicll <1605090219@qq.com>",
+  "homepage": "https://github.com/volcanicll/biform#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/volcanicll/biform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/volcanicll/biform/issues"
+  },
+  "keywords": [
+    "react",
+    "react-components",
+    "form",
+    "ui-library",
+    "platform",
+    "responsive",
+    "headless",
+    "mobile",
+    "pc",
+    "accessibility",
+    "a11y",
+    "css-modules",
+    "typescript"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "type": "module",
   "sideEffects": [
     "**/*.css",

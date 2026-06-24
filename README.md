@@ -1,5 +1,9 @@
 # common-component
 
+> **One API, Two UIs** — a platform-adaptive React form component library. The same `<Input>` / `<Select>` / `<Switch>` / `<Checkbox>` / `<Form>` renders a compact PC layout on desktop and a touch-friendly bottom-sheet layout on mobile, switched automatically by platform context.
+>
+> [![CI](https://github.com/volcanicll/biform/actions/workflows/ci.yml/badge.svg)](https://github.com/volcanicll/biform/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
 一套 API、两套 UI 的 React 表单组件库 —— 同一个 `<Input>` / `<Select>` / `<Switch>` / `<Checkbox>` / `<Form>`，在 PC 上渲染紧凑的下拉/网格布局，在移动端渲染底部弹出选择器/大触摸区/纵向堆叠，由**平台上下文自动切换**。
 
 - 🎯 **一套 API，两套 UI**：headless 钩子写一次逻辑，PC / 移动两端表现层各自渲染，由 `usePlatform()` 分发。
@@ -20,7 +24,7 @@ yarn install        # 使用 .npmrc 配置的 npmmirror 镜像
 yarn dev            # 启动 Storybook（http://localhost:6006）
 yarn test           # 运行单元测试
 yarn build          # 构建库（dist/，ESM + CJS + d.ts）
-yarn build:storybook# 构建静态文档站
+yarn build:storybook  # 构建静态文档站
 yarn lint
 ```
 
@@ -144,3 +148,7 @@ src/
 - Select 多选、虚拟滚动（`pc.virtual`）。
 - `ThemeProvider` / `ConfigProvider` 运行期主题注入组件（当前靠 CSS 变量覆盖）。
 - 更多组件：Radio、DatePicker、Dialog、Drawer。
+
+## License
+
+[MIT](./LICENSE) © 2026 [volcanicll](https://github.com/volcanicll)
