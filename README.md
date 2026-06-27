@@ -144,7 +144,7 @@ src/
 
 ## 路线图
 
-- `useSyncExternalStore` 替换 `useMediaQuery` 的 `unstable` 门控（更严格的 SSR）。
+- ✅ `useMediaQuery` 已改用 `useSyncExternalStore`（更严格的 SSR、并发安全；`unstable` 水合门控作为公共契约保留）。
 - Select 多选、虚拟滚动（`pc.virtual`）。
 - `ThemeProvider` / `ConfigProvider` 运行期主题注入组件（当前靠 CSS 变量覆盖）。
 - 更多组件：Radio、DatePicker、Dialog、Drawer。

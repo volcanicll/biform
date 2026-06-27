@@ -1,24 +1,44 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 import { canUseDOM } from '@/utils/ssr';
 
 /**
- * SSR-safe media-query matcher.
+ * SSR-safe media-query matcher backed by `useSyncExternalStore`.
  *
- * Returns `false` during SSR AND during the first client render (state is seeded
- * `false`, never read from `window` in the initializer) so the hydrated output
- * matches the server output. The real match is read in an effect after mount.
+ * The server render (and the client hydration pass) resolves to `false`; once
+ * mounted on the client the real match is read synchronously from
+ * `MediaQueryList.matches`, and React re-renders whenever the list fires a
+ * `change` event.
+ *
+ * This is the React-recommended external-store subscription pattern. Compared to
+ * the previous `useState` + `useEffect` pair it is:
+ * - **concurrent-safe** — no tearing under concurrent rendering;
+ * - **stricter for SSR** — `getServerSnapshot` is the single source of truth
+ *   during hydration, so the hydrated DOM is guaranteed to match the server;
+ * - **flash-free on client-only apps** — the first client render already reads
+ *   the real match instead of a placeholder `false` that flips after mount.
+ *
+ * Returns `false` when `matchMedia` is unavailable (SSR / non-DOM environment).
  */
 export function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState(false);
+  // Stable per-query subscription: React re-subscribes only when `query` changes.
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => {
+      if (!canUseDOM || typeof window.matchMedia !== 'function') return () => {};
+      const mql = window.matchMedia(query);
+      mql.addEventListener('change', onStoreChange);
+      return () => mql.removeEventListener('change', onStoreChange);
+    },
+    [query],
+  );
 
-  useEffect(() => {
-    if (!canUseDOM || typeof window.matchMedia !== 'function') return;
-    const mql = window.matchMedia(query);
-    setMatches(mql.matches);
-    const handler = (event: MediaQueryListEvent) => setMatches(event.matches);
-    mql.addEventListener('change', handler);
-    return () => mql.removeEventListener('change', handler);
+  // Reads a primitive, so referential stability is not required.
+  const getSnapshot = useCallback(() => {
+    if (!canUseDOM || typeof window.matchMedia !== 'function') return false;
+    return window.matchMedia(query).matches;
   }, [query]);
 
-  return matches;
+  // Server / pre-hydration value: never touch `window`.
+  const getServerSnapshot = useCallback(() => false, []);
+
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

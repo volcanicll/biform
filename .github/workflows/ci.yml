@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   ci:
-    name: Lint · Test · Build
+    name: Lint · Typecheck · Test · Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,6 +27,9 @@ jobs:
 
       - name: Lint
         run: yarn lint
+
+      - name: Typecheck
+        run: yarn typecheck
 
       - name: Test
         run: yarn test

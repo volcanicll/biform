@@ -6,6 +6,7 @@
 
 ### 性能
 
+- **`useMediaQuery` 改用 `useSyncExternalStore`**：替换原 `useState(false)` + `useEffect` 订阅模式。更严格的 SSR（`getServerSnapshot` 为水合期唯一真值来源，水合 DOM 必然匹配服务端）、并发渲染安全（无 tearing）、纯客户端首帧即读取真实匹配（无占位 `false` 闪烁）。新增 5 个单测覆盖初始值、变更响应、多查询隔离与卸载清理。`PlatformProvider` 的 `unstable` 水合门控作为公共契约保留不变。
 - **`useClickOutside` 不再每次渲染重订阅**：`refs` 移入 ref 在事件时读取，订阅仅依赖 `[active, doc]`。此前 `Overlay` 传入的内联 `[...outsideRefs, contentRef]` 数组每次渲染都是新引用，导致 `mousedown`/`touchstart` 监听器每次渲染都被卸载重挂。
 - **`useSelect` 的 `refs` 稳定化**：此前 `refs: { trigger, listbox }` 每次渲染都是新对象，使 PC Select 的 `[open, refs]` 定位 effect 在弹层打开期间每次渲染都重跑（每次按键 / 悬停 / 属性变更都触发 `getBoundingClientRect` + `setState`）。改为 `useMemo` 稳定引用。同时移除从未被读取的死代码 `optionsRef`。
 - **Form 上下文不再每次渲染失效**：`useFormState` 返回值每次渲染都是新对象，原 `contextValue = useMemo(..., [formState, layout])` 失效 → `FormItem` 的注册 effect `[ctx, name, rules]` 每次按键都重跑（反复 unregister/register）。改为依赖各个稳定成员（setter 均为 `useCallback`），注册只在挂载/卸载或 `name`/`rules` 变更时发生。
@@ -18,6 +19,8 @@
 
 ### 变更
 
+- **依赖升级（仅 minor/patch，保护 CI 绿）**：`@testing-library/jest-dom` / `react` / `user-event`、`less`、`prettier`、`eslint-plugin-react`、`@typescript-eslint/*`、`@storybook/addon-essentials`。刻意不升 React 19 / Vite 8 / TypeScript 6 / Storybook 10 / ESLint 10 / Vitest 4 等含破坏性变更的主版本，待单独评估。
+- **工具链强化**：新增 `typecheck`（`tsc --noEmit`）与 `prepublishOnly`（lint + typecheck + test + build 守卫）脚本；CI workflow 新增 Typecheck 步骤（job 名改为 Lint · Typecheck · Test · Build）。
 - `.storybook/preview.tsx`：双视口装饰器改用 `MobileFrame`（iframe 真机）+ PC 卡片，新增画布背景与标题说明。
 
 ### 文档
